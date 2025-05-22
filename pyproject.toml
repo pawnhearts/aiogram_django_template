@@ -1,0 +1,18 @@
+[project]
+name = "aiogram_django_template"
+version = "0.1.0"
+description = "aiogram + django project template"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "aiogram>=3.20.0.post0",
+    "aiohttp-autoreload>=0.0.1",
+    "django>=5.2.1",
+    "django-redis>=5.4.0",
+    "gunicorn>=23.0.0",
+    "psycopg2-binary>=2.9.10",
+    "python-dateutil>=2.9.0.post0",
+    "python-decouple>=3.8",
+    "ruff>=0.11.10",
+    "whitenoise>=6.9.0",
+]
