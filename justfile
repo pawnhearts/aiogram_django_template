@@ -10,14 +10,15 @@ static:
     docker compose -f compose.yml run web uv run python manage.py collectstatic --noinput
 
 messages:
-    export LANG=$(echo $LANG | cut -. -f1)
+    export LANG=$(echo $LANG | cut -. -f1) || export LANG=en_US
     docker compose -f compose.yml run web uv run python manage.py makemessages -l $LANG  --noinput
     docker compose -f compose.yml run web uv run python manage.py compilemessages -l $LANG  --noinput
 
-shell:
+dbsh:
     docker compose -f compose.yml run web uv run python manage.py dbshell
 
 sh:
+    docker compose -f compose.yml run web uv run python manage.py shell_plus || \
     docker compose -f compose.yml run web uv run python manage.py shell_plus
 
 re:
@@ -26,12 +27,8 @@ re:
     - grep migration /tmp/git-pull.log && docker compose run web uv run python manage.py migrate
     - grep static /tmp/git-pull.log && docker compose run web uv run python manage.py collectstatic --noinput
     - grep locale /tmp/git-pull.log && docker compose run web uv run python manage.py compilemessages -l ru_RU --noinput
-    docker compose restart bot web
-    docker compose up -d
+    docker compose restart bot
+    - dc logs -n100  web |grep 'line' |grep 'File' && docker compose restart web
+    docker compose up --remove-orphans -d
 
     docker compose logs -n300 -f bot web
-
-pu:
-    git command -a -mfix
-    git push
-    ssh mbtl "cd mbtl && just re"

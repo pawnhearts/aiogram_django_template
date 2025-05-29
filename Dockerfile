@@ -8,22 +8,22 @@ RUN apt-get update && \
 # Change the working directory to the `app` directory
 WORKDIR /app
 
-ADD . /app
-
-RUN uv sync --frozen --no-install-project
+#ADD . /app
+#
+#RUN uv sync --frozen --no-install-project
 
 # Install dependencies
-#RUN --mount=type=cache,target=/root/.cache/uv \
-#    --mount=type=bind,source=uv.lock,target=uv.lock \
-#    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
-#    uv sync --frozen --no-install-project
+RUN --mount=type=cache,target=/root/.cache/uv \
+    --mount=type=bind,source=uv.lock,target=uv.lock \
+    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+    uv sync --frozen --no-install-project
 #
 # Copy the project into the image
-#ADD . /app
+ADD . /app
 
 # Sync the project
-#RUN --mount=type=cache,target=/root/.cache/uv \
-#    uv sync --frozen
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --frozen
 
 ENV PATH="/app/.venv/bin:$PATH"
 
